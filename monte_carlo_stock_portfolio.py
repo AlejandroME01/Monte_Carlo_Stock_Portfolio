@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import yfinance as yf
 
 
-# Get data to work with
+
 def get_data(stocks, start, end):
     stockData = yf.download(stocks, start, end)
     stockData = stockData['Close']
@@ -16,7 +16,7 @@ def get_data(stocks, start, end):
     covMatrix = returns.cov()
     return meanReturns, covMatrix
 
-#List of Securities
+
 stockList = ['TSLA', 'MSFT', 'O', 'GME', 'COIN', 'HOOD']
 stocks = stockList
 enddate = datetime.datetime.now()
@@ -27,9 +27,8 @@ meanReturns, covMatrix = get_data(stocks, startdate, enddate)
 weights = np.random.random(len(meanReturns))
 weights /= np.sum(weights)
 
-# Monte Carlo Simulation
-mc_sims = 500 # number of simulations
-T = 90 # timeframe in days
+mc_sims = 500 
+T = 90 
 
 meanM = np.full(shape=(T, len(weights)), fill_value=meanReturns)
 meanM = meanM.T
@@ -39,9 +38,9 @@ portfolio_sims = np.full(shape=(T, mc_sims), fill_value=0.0)
 initialPortfolio = 100000
 
 for m in range(0, mc_sims):
-    Z = np.random.normal(size=(T, len(weights)))#uncorrelated RV's
-    L = np.linalg.cholesky(covMatrix) #Cholesky decomposition to Lower Triangular Matrix
-    dailyReturns = meanM + np.inner(L, Z) #Correlated daily returns for individual stocks
+    Z = np.random.normal(size=(T, len(weights)))
+    L = np.linalg.cholesky(covMatrix) 
+    dailyReturns = meanM + np.inner(L, Z)
     portfolio_sims[:,m] = np.cumprod(np.inner(weights, dailyReturns.T)+1)*initialPortfolio
 
 plt.plot(portfolio_sims)
