@@ -20,7 +20,7 @@ def get_data(stocks, start, end):
 stockList = ['TSLA', 'MSFT', 'O', 'GME', 'COIN', 'HOOD']
 stocks = stockList
 enddate = datetime.datetime.now()
-startdate = enddate - datetime.timedelta(days=300)
+startdate = enddate - datetime.timedelta(days=180)
 
 meanReturns, covMatrix = get_data(stocks, startdate, enddate)
 
